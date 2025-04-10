@@ -144,7 +144,7 @@ function generarEstructura() {
                 alert("usted ha obtenido Diamante")
             }
         }else if(actuar === 2){
-            window.location.href = "index.html"
+            window.location.href = "inicio.html"
         }
     }
 }
