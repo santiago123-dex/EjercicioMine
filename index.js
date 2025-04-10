@@ -54,14 +54,14 @@ let materiales = {
         }
     },
     menas: {
-        carbon: {
-            resistencia: 8
+        oro: {
+            cantidad : 1
         },
         hierro: {
-            resistencia: 10
+            cantidad : 1
         },
-        piedra: {
-            resistencia: 6
+        diamante: {
+            cantidad : 1
         }
     }
 }
@@ -85,6 +85,21 @@ function random() {
     return Math.floor(Math.random() * 100) + 1
 }
 
+function verExistencia(objeto) {
+    if(!jugador.inventario[objeto]){
+        jugador.inventario[objeto] = 0
+    }
+    return
+}
+
+function contar(objeto1){
+    if(Object.keys(objeto1).length === 0){
+        alert()
+    }else{
+        return Object.keys(objeto1).length
+    }
+}
+
 //Inicio funciones de generación ------------------------------------------------------------------------------
 
 function generarEstructura() {
@@ -93,8 +108,44 @@ function generarEstructura() {
         alert(`Apareció un Portal`)
     }else if(num < 40){
         alert(`Apareció una aldea`)
+        let actuar = Number(prompt("Desea saquear 1, ignorar 2"))
+        if(actuar == 1){
+            let num = random()
+            if(num > 70){
+                verExistencia()
+                jugador.inventario.perla += estructuras.aldea.perla
+                alert(`Obtuviste una perla y ahora tienes ${jugador.inventario.perla} perlas`)
+            }else if(num > 40){
+                verExistencia()
+                jugador.inventario.espada = estructuras.aldea.espada
+                alert(`Obtuviste una espada y ahora tienes ${jugador.inventario.espada} daño adicional`)
+            }else{
+                alert("No se encontró nada")
+            }
+        }
     }else{
         alert(`Apareció una mina`)
+        let actuar = Number(prompt("Desea picar 1, ignorar 2"))
+        if(actuar === 1){
+            let decision = Number(prompt("Desea picar Oro 1, Desea picar Hierro 2, Desea picar Diamante 3"))
+            if(decision === 1){
+                verExistencia()
+                jugador.inventario.oro += materiales.menas.oro.cantidad
+                alert("Usted ha obtenido Oro")
+            } 
+            if(decision === 2){
+                verExistencia()
+                jugador.inventario.hierro += materiales.menas.hierro.cantidad
+                alert("Usted ha obtenido Hierro")
+            }
+            if(decision === 3){
+                verExistencia()
+                jugador.inventario.diamante += materiales.menas.diamante.cantidad
+                alert("usted ha obtenido Diamante")
+            }
+        }else if(actuar === 2){
+            window.location.href = "index.html"
+        }
     }
 }
 
@@ -123,16 +174,17 @@ function generarMob() {
 //FIn funciones generar ----------------------------------------------------------------------------------------------------
 
 //Funciones adicionales -----------------------------------------------------------------------------------------------------
-function picarEstrucutra(direccion) {
+/*function picarEstrucutra(direccion) {
     if (direccion.x == 10 && direccion.y == 10) {
         let decision = prompt("Desea picar la madera?")
         if (decision == "si") {
-            let inventario = Object.assign(...estructuras.materiales.madera)
+            let inventario = {...estructuras.materiales.madera}
         } else {
             alert("puede seguir avanzando")
         }
     }
 }
+*/
 
 function moverPersonaje() {
     let numero = random()
@@ -141,6 +193,14 @@ function moverPersonaje() {
     } else {
         generarEstructura()
     }
+}
+
+function verInventario (){
+    let mensaje = ""
+    for(let cosas in jugador.inventario){
+        mensaje += `${cosas} : ${jugador.inventario[cosas]}\n`
+    }
+    alert(mensaje)
 }
 
 
@@ -155,9 +215,10 @@ while(activo){
             moverPersonaje()
             break
         case 2:
+            verInventario()
             break
         case 3:
-            picarEstrucutra()
+            window.location.href = "index.html"
             break
     }
 } 
