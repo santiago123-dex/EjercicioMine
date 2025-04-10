@@ -97,7 +97,7 @@ function generarEstructura(){
 function generarMob(){
     let num = random()
     if(num < 60){
-        
+        console.log("buenas")
     }
 }
 
