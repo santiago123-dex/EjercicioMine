@@ -1,122 +1,144 @@
-let activo = true
+let activo = true //Ejecuta el primer while, el principal
 
+//Objetos ------------------------------------------------------------------
 let jugador = {
-    status:{
-        vida : 20,
+    status: {
+        vida: 20,
         hambre: 20,
-        daño : 2
+        daño: 2
     },
-    inventario : {},
-    armadura : {
-        casco : "",
-        pechera : "",
-        pantalon : "",
-        botas : ""
+    inventario: {},
+    armadura: {
+        casco: "",
+        pechera: "",
+        pantalon: "",
+        botas: ""
     }
 }
 
 let mobs = {
-    hostiles : {
-        araña : {
-            daño : 1,
-            vida : 3
+    hostiles: {
+        araña: {
+            daño: 1,
+            vida: 3
         },
-        esqueleto : {
-            daño : 3,
-            vida : 5
+        esqueleto: {
+            daño: 3,
+            vida: 5
         },
-        zombie : {
-            daño : 2,
+        zombie: {
+            daño: 2,
             vida: 6
         }
     },
-    pacifico : {
-        oveja : {
-            vida : 3,
-            comida : 5
+    pacifico: {
+        oveja: {
+            vida: 3,
+            comida: 5
         },
-        vaca : {
-            vida : 4,
-            comida : 7
+        vaca: {
+            vida: 4,
+            comida: 7
         },
-        cerdo : {
-            vida : 3,
-            comida : 6
+        cerdo: {
+            vida: 3,
+            comida: 6
         }
     }
 }
 
 let materiales = {
-    recursos : {
-        madera : {
-            resistencia : 4
+    recursos: {
+        madera: {
+            resistencia: 4
         }
     },
-    menas : {
-        carbon : {
-            resistencia : 8
+    menas: {
+        carbon: {
+            resistencia: 8
         },
-        hierro : {
-            resistencia : 10
+        hierro: {
+            resistencia: 10
         },
-        piedra : {
-            resistencia : 6
+        piedra: {
+            resistencia: 6
         }
     }
 }
 
 let estructuras = {
-    aldea:{
-        perla : 1,
-        espada : 5
+    aldea: {
+        perla: 1,
+        espada: 5
     },
-    mina : {
+    mina: {
         ...materiales.menas
     },
-    portalEnd:{
-        perla : 3
+    portalEnd: {
+        perla: 3
     }
 }
 
-function random(){
+//Fin objetos -------------------------------------------------------------------
+
+function random() {
     return Math.floor(Math.random() * 100) + 1
 }
 
-function generarEstructura(){
-    let numero = random()
-    if(numero < 60){
-        
-    }else if(numero < 95){
-        
-    }else{
-        
-    }
-        
-}
+//Inicio funciones de generación ------------------------------------------------------------------------------
 
-function generarMob(){
+function generarEstructura() {
     let num = random()
-    if(num < 60){
-        console.log("buenas")
+    if (num < 5) {
+        alert(`Apareció un Portal`)
+    }else if(num < 40){
+        alert(`Apareció una aldea`)
+    }else{
+        alert(`Apareció una mina`)
     }
 }
 
-function picarEstrucutra (direccion){
-    if(direccion.x == 10 && direccion.y == 10){
+function generarMob() {
+    let num = random()
+    if (num < 60) {
+        let num = random()
+        if (num < 40) {
+            alert(`Apareció una oveja`)
+        } else if (num < 70) {
+            alert(`Apareció una vaca`)
+        } else {
+            alert(`Apareció un cerdo`)
+        }
+    } else {
+        let num = random()
+        if (num < 40) {
+            alert(`Apareció una araña`)
+        } else if (num < 70) {
+            alert(`Apareció un esqueleto`)
+        } else {
+            alert(`Apareció un zombie`)
+        }
+    }
+}
+//FIn funciones generar ----------------------------------------------------------------------------------------------------
+
+//Funciones adicionales -----------------------------------------------------------------------------------------------------
+function picarEstrucutra(direccion) {
+    if (direccion.x == 10 && direccion.y == 10) {
         let decision = prompt("Desea picar la madera?")
-        if(decision == "si"){
+        if (decision == "si") {
             let inventario = Object.assign(...estructuras.materiales.madera)
-        }else{
+        } else {
             alert("puede seguir avanzando")
         }
     }
 }
 
-function moverPersonaje (){
+function moverPersonaje() {
     let numero = random()
-    if(numero < 70){
+    if (numero < 70) {
         generarMob()
-    }else{
+    } else {
         generarEstructura()
     }
 }
@@ -124,12 +146,12 @@ function moverPersonaje (){
 
 
 
+//While principal --------------------------------------------------------------------------------------------------
 
-
-do{
-    let hacerAlgo = prompt("Moverse 1, Interactuar inventario 2, Picar 3")
-    switch(hacerAlgo){
-        case 1 :
+while(activo){
+    let hacerAlgo = Number(prompt("Moverse 1, Interactuar inventario 2, Picar 3"))
+    switch (hacerAlgo) {
+        case 1:
             moverPersonaje()
             break
         case 2:
@@ -138,5 +160,4 @@ do{
             picarEstrucutra()
             break
     }
-    
-}while(activo)
+} 
