@@ -1,5 +1,4 @@
 let activo = true //Ejecuta el primer while, el principal
-
 //Objetos ------------------------------------------------------------------
 let jugador = {
     status: {
@@ -7,7 +6,8 @@ let jugador = {
         hambre: 20,
         daño: 2
     },
-    inventario: {},
+    inventario: {
+    },
     armadura: {
         casco: 0,
         pechera: 0,
@@ -29,6 +29,17 @@ let mobs = {
         zombie: {
             daño: 2,
             vida: 6
+        },
+        dragon : {
+            "daño minimo" : 2,
+            "daño normal" : 4,
+            "daño maximo" : 8,
+            "daño esquivado" : 0,
+            get dañoDragon(){
+                let num = random()
+                return num >= 90 ? this["daño esquivado"] : num >= 50 ? this["daño normal"] : num >= 20 ? this["daño maximo"] : this["daño minimo"]
+            },
+            vida : 50
         }
     },
     pacifico: {
@@ -96,27 +107,58 @@ function verExistencia(objeto) {
     return
 }
 
-
 //Inicio funciones de generación ------------------------------------------------------------------------------
 
 function generarEstructura() {
     let num = random()
-    if (num < 5) {
+    if (num <= 5) {
         alert(`Apareció un Portal`)
         let actuar = Number(prompt("Desea entrar 1, ignorar 2"))
-        if(actuar < 1 || actuar > 2){
-            alert("Seleccione la opcion correcta")
-            actuar = Number(prompt("Desea picar 1, ignorar 2"))
-        }
         if(actuar == 1){
+            verExistencia("perla")
             if(jugador.inventario.perla >= 3){
+                actuar = confirm(`Estas seguro que quieres entrar con ${jugador.status.vida} de vida y los siguiente items en el inventario?:\n${verInventario()}`)
+                if(!actuar){
+                    window.location.href = "inicio.html"
+                }
+                jugador.inventario.perla -= 3
+                alert("Has entrado al End, Preparate para la pelea")
+                alert(`La vida del dragón es ${mobs.hostiles.dragon.vida}\nTu vida es ${vidaTotal}`)
+                activo = false
+                while(mobs.hostiles.dragon.vida > 0 && vidaTotal > 0){
+                    let decision = Number(prompt("Quiere atacarlo 1, Quiere alimentarse 2"))
+                    if(decision === 1){
+                        vidaTotal -= mobs.hostiles.dragon.dañoDragon
+                        if(vidaTotal > 0){
+                            mobs.hostiles.dragon.vida -= jugador.status.daño
+                            if(mobs.hostiles.dragon.vida > 0){
+                                alert(`Vida restante del jugador ${vidaTotal}`)
+                                alert(`Vida restante del dragon ${mobs.hostiles.dragon.vida}`)
+                            }else{
+                                alert(`Vida restante del jugador ${vidaTotal}`)
+                                alert("Dragon muerto")
+                                alert("Ganaste el juego")
+                                activo = false
+                                window.location.href = "index.html"
+                            }
+                        }else{
+                            alert("Jugador muerto")
+                            activo = false
+                            window.location.href = "index.html"
+                        }
+                    }else if(decision === 2){
+                        alimentarse()
+                    }else{
+                        alert("Elija una opcion correcta")
+                    }
+                }
             }else{
-            alert("Perlas insuficientes")
+                alert("Perlas insuficientes")
             }
         }else{
             window.location.href = "inicio.html"
         }
-    }else if(num < 30){
+    }else if(num <= 30){
         alert(`Apareció una aldea`)
         let actuar = Number(prompt("Desea saquear 1, ignorar 2"))
         if(actuar < 1 || actuar > 2){
@@ -254,6 +296,7 @@ function generarMob() {
                     }
                 }
             }else{
+                mobs.hostiles.araña.vida = 3
                 window.location.href = "inicio.html"
             }
         } else if (num < 70) {
@@ -290,6 +333,7 @@ function generarMob() {
                     }
                 }
             }else{
+                mobs.hostiles.esqueleto.vida = 5
                 window.location.href = "inicio.html"
             }
         } else {
@@ -326,6 +370,7 @@ function generarMob() {
                     }
                 }
             }else{
+                mobs.hostiles.zombie.vida = 6
                 window.location.href = "inicio.html"
             }
         }
@@ -362,7 +407,7 @@ function verInventario (){
     for(let cosas in jugador.inventario){
         mensaje += `${cosas} : ${jugador.inventario[cosas]}\n`
     }
-    alert(mensaje)
+    return mensaje
 }
 
 function vidaEstatica (){
@@ -404,7 +449,7 @@ while(activo){
             moverPersonaje()
             break
         case 2:
-            verInventario()
+            alert(verInventario())
             break
         case 3:
             alimentarse()
