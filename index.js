@@ -144,6 +144,7 @@ function generarEstructura() {
                     jugador.armadura.pechera += 5
                     jugador.armadura.pantalon += 5
                     jugador.armadura.botas += 5
+                    vidaTotal = vidaEstatica()
                     alert("Armadura agregada correctamente")
                 }else{
                     alert("Ya tienes armadura")
@@ -234,7 +235,16 @@ function generarMob() {
                             decision = 2
                         }else{
                             alert(`Vida restante del jugador ${vidaTotal}`)
-                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                            do{
+                                decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                if(decision < 1 || decision > 3){
+                                    alert("Elija una opcion correcta")
+                                    decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                }
+                                if(decision == 3){
+                                    alimentarse()
+                                }
+                            }while(decision == 3)
                         }
                     }else{
                         alert("Jugador muerto")
@@ -261,7 +271,16 @@ function generarMob() {
                             decision = 2
                         }else{
                             alert(`Vida restante del jugador ${vidaTotal}`)
-                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                            do{
+                                decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                if(decision < 1 || decision > 3){
+                                    alert("Elija una opcion correcta")
+                                    decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                }
+                                if(decision == 3){
+                                    alimentarse()
+                                }
+                            }while(decision == 3)
                         }
                     }else{
                         alert("Jugador muerto")
@@ -288,7 +307,16 @@ function generarMob() {
                             decision = 2
                         }else{
                             alert(`Vida restante del jugador ${vidaTotal}`)
-                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                            do{
+                                decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                if(decision < 1 || decision > 3){
+                                    alert("Elija una opcion correcta")
+                                    decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2, Quiere alimentarse 3."))
+                                }
+                                if(decision == 3){
+                                    alimentarse()
+                                }
+                            }while(decision == 3)
                         }
                     }else{
                         alert("Jugador muerto")
