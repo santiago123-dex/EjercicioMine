@@ -9,10 +9,10 @@ let jugador = {
     },
     inventario: {},
     armadura: {
-        casco: "",
-        pechera: "",
-        pantalon: "",
-        botas: ""
+        casco: 0,
+        pechera: 0,
+        pantalon: 0,
+        botas: 0
     }
 }
 
@@ -34,15 +34,15 @@ let mobs = {
     pacifico: {
         oveja: {
             vida: 3,
-            comida: 5
+            comida: 4
         },
         vaca: {
             vida: 4,
-            comida: 7
+            comida: 4
         },
         cerdo: {
             vida: 3,
-            comida: 6
+            comida: 4
         }
     }
 }
@@ -81,9 +81,13 @@ let estructuras = {
 
 //Fin objetos -------------------------------------------------------------------
 
+// funcion numero aleatorio
+
 function random() {
     return Math.floor(Math.random() * 100) + 1
 }
+
+// funcion para saber si ese objetoo existe
 
 function verExistencia(objeto) {
     if(!jugador.inventario[objeto]){
@@ -92,13 +96,6 @@ function verExistencia(objeto) {
     return
 }
 
-function contar(objeto1){
-    if(Object.keys(objeto1).length === 0){
-        alert()
-    }else{
-        return Object.keys(objeto1).length
-    }
-}
 
 //Inicio funciones de generación ------------------------------------------------------------------------------
 
@@ -106,19 +103,51 @@ function generarEstructura() {
     let num = random()
     if (num < 5) {
         alert(`Apareció un Portal`)
-    }else if(num < 40){
+        let actuar = Number(prompt("Desea entrar 1, ignorar 2"))
+        if(actuar < 1 || actuar > 2){
+            alert("Seleccione la opcion correcta")
+            actuar = Number(prompt("Desea picar 1, ignorar 2"))
+        }
+        if(actuar == 1){
+            if(jugador.inventario.perla >= 3){
+            }else{
+            alert("Perlas insuficientes")
+            }
+        }else{
+            window.location.href = "inicio.html"
+        }
+    }else if(num < 30){
         alert(`Apareció una aldea`)
         let actuar = Number(prompt("Desea saquear 1, ignorar 2"))
+        if(actuar < 1 || actuar > 2){
+            alert("Seleccione la opcion correcta")
+            actuar = Number(prompt("Desea picar 1, ignorar 2"))
+        }
         if(actuar == 1){
             let num = random()
-            if(num > 70){
-                verExistencia()
+            if(num > 85){
+                verExistencia("perla")
                 jugador.inventario.perla += estructuras.aldea.perla
                 alert(`Obtuviste una perla y ahora tienes ${jugador.inventario.perla} perlas`)
-            }else if(num > 40){
-                verExistencia()
-                jugador.inventario.espada = estructuras.aldea.espada
-                alert(`Obtuviste una espada y ahora tienes ${jugador.inventario.espada} daño adicional`)
+            }else if(num > 60){
+                if(!jugador.inventario.espada){
+                    verExistencia("espada")
+                    jugador.inventario.espada += estructuras.aldea.espada
+                    jugador.status.daño += jugador.inventario.espada
+                    alert(`Obtuviste una espada y ahora tienes ${jugador.inventario.espada} daño adicional`)
+                }else{
+                    alert("Ya tienes una espada en tu inventario")
+                }
+            }else if(num >40){
+                if(jugador.armadura.casco === 0){
+                    jugador.armadura.casco += 5
+                    jugador.armadura.pechera += 5
+                    jugador.armadura.pantalon += 5
+                    jugador.armadura.botas += 5
+                    alert("Armadura agregada correctamente")
+                }else{
+                    alert("Ya tienes armadura")
+                }
             }else{
                 alert("No se encontró nada")
             }
@@ -126,20 +155,24 @@ function generarEstructura() {
     }else{
         alert(`Apareció una mina`)
         let actuar = Number(prompt("Desea picar 1, ignorar 2"))
+        if(actuar < 1 || actuar > 2){
+            alert("Seleccione la opcion correcta")
+            actuar = Number(prompt("Desea picar 1, ignorar 2"))
+        }
         if(actuar === 1){
             let decision = Number(prompt("Desea picar Oro 1, Desea picar Hierro 2, Desea picar Diamante 3"))
             if(decision === 1){
-                verExistencia()
+                verExistencia("oro")
                 jugador.inventario.oro += materiales.menas.oro.cantidad
                 alert("Usted ha obtenido Oro")
             } 
-            if(decision === 2){
-                verExistencia()
+            else if(decision === 2){
+                verExistencia("hierro")
                 jugador.inventario.hierro += materiales.menas.hierro.cantidad
                 alert("Usted ha obtenido Hierro")
             }
-            if(decision === 3){
-                verExistencia()
+            else if(decision === 3){
+                verExistencia("diamante")
                 jugador.inventario.diamante += materiales.menas.diamante.cantidad
                 alert("usted ha obtenido Diamante")
             }
@@ -155,19 +188,118 @@ function generarMob() {
         let num = random()
         if (num < 40) {
             alert(`Apareció una oveja`)
+            let decision = Number(prompt("Quiere matarla 1, Quiero ignorarla 2."))
+            if(decision === 1){
+                verExistencia("comida")
+                jugador.inventario.comida += mobs.pacifico.oveja.comida
+                alert("Ha recibido comida")
+            }else{
+                window.location.href = "inicio.html"
+            }
         } else if (num < 70) {
             alert(`Apareció una vaca`)
+            let decision = Number(prompt("Quiere matarla 1, Quiere ignorarla 2."))
+            if(decision === 1){
+                verExistencia("comida")
+                jugador.inventario.comida += mobs.pacifico.vaca.comida
+                alert("Ha recibido comida")
+            }else{
+                window.location.href = "inicio.html"
+            }
         } else {
             alert(`Apareció un cerdo`)
+            let decision = Number(prompt("Quiere matarla 1, Quiere ignorarla 2."))
+            if(decision === 1){
+                verExistencia("comida")
+                jugador.inventario.comida += mobs.pacifico.cerdo.comida
+                alert("Ha recibido comida")
+            }else{
+                window.location.href = "inicio.html"
+            }
         }
     } else {
         let num = random()
         if (num < 40) {
             alert(`Apareció una araña`)
+            let decision = Number(prompt("Quiere matarla 1, Quiere ignorarla 2."))
+            if(decision === 1){
+                while(decision === 1){
+                    vidaTotal -= mobs.hostiles.araña.daño
+                    if(vidaTotal > 0){
+                        mobs.hostiles.araña.vida -= jugador.status.daño
+                        if(mobs.hostiles.araña.vida <= 0){
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            alert("Araña muerta")
+                            mobs.hostiles.araña.vida = 3
+                            decision = 2
+                        }else{
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                        }
+                    }else{
+                        alert("Jugador muerto")
+                        decision = 2
+                        activo = false
+                        window.location.href = "index.html"
+                    }
+                }
+            }else{
+                window.location.href = "inicio.html"
+            }
         } else if (num < 70) {
             alert(`Apareció un esqueleto`)
+            let decision = Number(prompt("Quiere matarl0 1, Quiere ignorarlo 2."))
+            if(decision === 1){
+                while(decision === 1){
+                    vidaTotal -= mobs.hostiles.esqueleto.daño
+                    if(vidaTotal> 0){
+                        mobs.hostiles.esqueleto.vida -= jugador.status.daño
+                        if(mobs.hostiles.esqueleto.vida <= 0){
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            alert("Esqueleto muerto")
+                            mobs.hostiles.esqueleto.vida = 5
+                            decision = 2
+                        }else{
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                        }
+                    }else{
+                        alert("Jugador muerto")
+                        decision = 2
+                        activo = false
+                        window.location.href = "index.html"
+                    }
+                }
+            }else{
+                window.location.href = "inicio.html"
+            }
         } else {
             alert(`Apareció un zombie`)
+            let decision = Number(prompt("Quiere matarlo 1, Quiere ignorarlo 2."))
+            if(decision === 1){
+                while(decision === 1){
+                    vidaTotal -= mobs.hostiles.zombie.daño
+                    if(vidaTotal > 0){
+                        mobs.hostiles.zombie.vida -= jugador.status.daño
+                        if(mobs.hostiles.zombie.vida <= 0){
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            alert("Zombie muerto")
+                            mobs.hostiles.zombie.vida = 6
+                            decision = 2
+                        }else{
+                            alert(`Vida restante del jugador ${vidaTotal}`)
+                            decision = Number(prompt("Quiere volver a pegar 1, Quiere huir 2."))
+                        }
+                    }else{
+                        alert("Jugador muerto")
+                        decision = 2
+                        activo = false
+                        window.location.href = "index.html"
+                    }
+                }
+            }else{
+                window.location.href = "inicio.html"
+            }
         }
     }
 }
@@ -186,6 +318,8 @@ function generarMob() {
 }
 */
 
+
+
 function moverPersonaje() {
     let numero = random()
     if (numero < 70) {
@@ -203,13 +337,40 @@ function verInventario (){
     alert(mensaje)
 }
 
+function vidaEstatica (){
+    jugador.status.vida = 20
+    for(let cosa in jugador.armadura){
+        jugador.status.vida += jugador.armadura[cosa]
+    }
+    return jugador.status.vida
+}
+
+
+
+function alimentarse(){
+    verExistencia("comida")
+    if(jugador.inventario.comida >= 4){
+        if(vidaTotal < vidaEstatica()){
+            vidaTotal += 4
+            jugador.inventario.comida -= 4
+            alert(`Has recuperdao 4 de vida. Ahora tienes:\n${vidaTotal} vida\n${jugador.inventario.comida} comida`)
+        }else{
+            alert("Tienes toda la vida")
+        }
+    }else{
+        alert("deberas obtener mas comida")
+    }
+}
+
+let vidaTotal = vidaEstatica()
+
 
 
 
 //While principal --------------------------------------------------------------------------------------------------
 
 while(activo){
-    let hacerAlgo = Number(prompt("Moverse 1, Interactuar inventario 2, Picar 3"))
+    let hacerAlgo = Number(prompt("Moverse 1, Interactuar inventario 2, Comer 3, salir 4"))
     switch (hacerAlgo) {
         case 1:
             moverPersonaje()
@@ -218,7 +379,13 @@ while(activo){
             verInventario()
             break
         case 3:
+            alimentarse()
+            break
+        case 4:
+            activo = false
             window.location.href = "index.html"
             break
+        default :
+        break
     }
-} 
+}
